@@ -5,16 +5,24 @@ import { DEFAULT_ARROW_SIZE, DEFAULT_BORDER_RADIUS } from './Constants';
 
 // Need any here to match signature of findNodeHandle
 // eslint-disable-next-line
-type RefType = RefObject<number | Component<any, any, any> | ComponentClass<any, any> | null>;
+type RefType = RefObject<number | Component<any, any, any> | ComponentClass<any, any> | any>;
 
 export function getRectForRef(ref: RefType): Promise<Rect> {
   return new Promise((resolve, reject) => {
     if (ref.current) {
-      NativeModules.UIManager.measure(
-        findNodeHandle(ref.current),
-        (_1: unknown, _2: unknown, width: number, height: number, x: number, y: number) =>
-          resolve(new Rect(x, y, width, height))
-      );
+      if(NativeModules.UIManager) {
+        NativeModules.UIManager.measure(
+          findNodeHandle(ref.current),
+          (_1: unknown, _2: unknown, width: number, height: number, x: number, y: number) =>
+            resolve(new Rect(x, y, width, height))
+        );
+      } else {
+        ref.current.measure(
+          (_1: unknown, _2: unknown, width: number, height: number, x: number, y: number) =>
+            resolve(new Rect(x, y, width, height))
+        );
+      }
+      
     } else {
       reject(new Error('getRectForRef - current is not set'));
     }
