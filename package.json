@@ -1,6 +1,6 @@
 {
   "name": "@react-native-oh-tpl/react-native-popover-view",
-  "version": "5.1.7-0.0.1",
+  "version": "5.1.7-0.0.2",
   "description": "A <Popover /> component for react-native iOS, Android, and Web",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
